@@ -97,6 +97,10 @@
 			var waitTime = 0;
 		}
 		
+		if( options.removeAnimatedGifs ){
+			jQuery('img[src$=gif]').remove(); // can't tell if they're animated or not, so just remove all GIFs
+		}
+		
 		if( options.stripAllButImages ){
 			removeAllButImages();
 			
@@ -116,10 +120,6 @@
 			masonryRun = true;
 			
 			return;
-		}
-		
-		if( options.removeAnimatedGifs ){
-			jQuery('img[attr$=gif]').remove(); // can't tell if they're animated or not, so just remove all GIFs
 		}
 		
 		this.each( function(){
