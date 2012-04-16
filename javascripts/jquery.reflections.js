@@ -84,7 +84,8 @@
 			'rotation' : 45, 
 			'opacity' : 0.5, 
 			'destroyAllButImages' : false,
-			'overflowHidden' : true
+			'overflowHidden' : true,
+			'removeAnimatedGifs' : false
 		}, 
 		item = null,
 		options = options || {};
@@ -115,6 +116,10 @@
 			masonryRun = true;
 			
 			return;
+		}
+		
+		if( options.removeAnimatedGifs ){
+			jQuery('img[attr$=gif]').remove(); // can't tell if they're animated or not, so just remove all GIFs
 		}
 		
 		this.each( function(){
