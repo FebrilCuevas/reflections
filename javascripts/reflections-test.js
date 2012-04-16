@@ -3,8 +3,16 @@ jQuery( function(){
 	jQuery(document).delegate('body', 'keyup', function(e){
 		try{
 			switch( e.which ){
+				case 32: // spacebar
 				case 39: // right key
-					jQuery('li img').reflectImages({ 'delay': 80, 'rotation' : -130, 'opacity' : 0.4, 'stripLinks' : true });
+					e.preventDefault();
+					
+					jQuery('img').reflectImages({ 
+						'delay': 0, 
+						'rotation' : 45, 
+						'opacity' : 0.4, 
+						'stripAllButImages' : true }
+					);
 					break;
 				case 37: // left key
 					jQuery('li img').reflectImages({'destroy' : true });

@@ -25,3 +25,5 @@ li{float: left; margin-right: 240px; margin-bottom: 40px;}
 	position: absolute;	
 /*	opacity: 0.5;*/
 }
+
+.reflectionsWrapper{position: relative;}
