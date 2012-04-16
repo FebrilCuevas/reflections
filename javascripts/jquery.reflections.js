@@ -27,7 +27,8 @@
 			options = jQuery.extend(true, {}, options);
 			
 		// if we want delay so that we can see the reflection happening incrementally
-		if ( options.delay ){
+		// TODO: delay turned off right now because it doesn't work with dynamic masonry as a result of stripping all but images 
+		if ( false && options.delay ){ 
 			setTimeout( function(){
 				wrapImageInternal(options);
 			}, options.delaySpecific);
@@ -78,12 +79,20 @@
 		jQuery(window).scrollTop(0);
 	}
 	
+	function runMasonry(){
+		jQuery('body').masonry({
+			itemSelector : '.reflectionsWrapper',
+			columnWidth : 260,
+			isFitWidth: true
+		});
+		masonryRun = true;
+	}
 	
 	$.fn.reflectImages = function(options){
 		var defaults = { 
 			'rotation' : 45, 
 			'opacity' : 0.5, 
-			'destroyAllButImages' : false,
+			'stripAllButImages' : false,
 			'overflowHidden' : true,
 			'removeAnimatedGifs' : false
 		}, 
@@ -94,7 +103,7 @@
 		options = $.extend(defaults, options);
 		
 		if( options.delay ){
-			var waitTime = 0;
+			var waitTime = 0; // just init this here; it'll be a counter
 		}
 		
 		if( options.removeAnimatedGifs ){
@@ -106,18 +115,10 @@
 			
 			jQuery('img').reflectImages(jQuery.extend(true, {}, options, {'stripAllButImages' : false}));
 			
-			jQuery('.reflectionsWrapper').css('float', 'left');
-			
 			// leave things in place if run a second time
 			if( !masonryRun ){
-				jQuery('body').masonry({
-					itemSelector : '.reflectionsWrapper',
-					columnWidth : 260,
-					isFitWidth: true
-				});
+				runMasonry();
 			}
-			
-			masonryRun = true;
 			
 			return;
 		}
