@@ -1,0 +1,27 @@
+body{
+	background: black;	
+}
+ul,li{list-style: none;}
+li{float: left; margin-right: 240px; margin-bottom: 40px;}
+
+.top{
+	left: 0;
+}
+.right{
+	top: 0;
+}
+.bottom{
+	left: 0;
+}
+.left{
+	top: 0;
+}
+
+.imageWrapper{
+	position: relative;
+}
+
+.reflection{
+	position: absolute;	
+/*	opacity: 0.5;*/
+}
