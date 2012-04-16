@@ -83,7 +83,8 @@
 		var defaults = { 
 			'rotation' : 45, 
 			'opacity' : 0.5, 
-			'destroyAllButImages' : false // todo
+			'destroyAllButImages' : false,
+			'overflowHidden' : true
 		}, 
 		item = null,
 		options = options || {};
@@ -133,7 +134,9 @@
 			}
 		});
 		
-		jQuery('html').css('overflow', 'hidden');
+		if( options.overflowHidden ){
+			jQuery('html').css('overflow', 'hidden');
+		}
 		
 	}; // end $.fn.reflectImages
 		
