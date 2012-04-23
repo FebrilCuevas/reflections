@@ -19,7 +19,6 @@ document.getElementsByTagName('head')[0].appendChild(scriptElem);
 		document.getElementsByTagName('head')[0].appendChild(styleElem);
 		 
 		(function ensureMasonryLoaded() {
-			
 			console.log('appending reflections');
 			scriptElem = document.createElement('script');
 			scriptElem.src = 'https://raw.github.com/dguzzo/reflections/master/javascripts/jquery.reflections.js';
@@ -32,7 +31,8 @@ document.getElementsByTagName('head')[0].appendChild(scriptElem);
 									'rotation': 45,
 									'opacity': 0.4,
 									'stripAllButImages': true,
-									'removeAnimatedGifs': true
+									'removeAnimatedGifs': true,
+									'ensureMinNumberOfImages' : 20
 								});
 							}
 							else{

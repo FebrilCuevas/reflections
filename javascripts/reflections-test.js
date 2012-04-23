@@ -12,7 +12,7 @@ jQuery( function(){
 						'rotation' : 45, 
 						'opacity' : 0.4, 
 						'stripAllButImages' : true,
-						'ensureMinNumberOfImages' : 24
+						'ensureMinNumberOfImages' : 20
 						}
 					);
 					break;

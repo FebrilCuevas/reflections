@@ -180,6 +180,10 @@
 			jQuery('html').css('overflow', 'hidden');
 		}
 		
+		// due to the masonry plugin and nature of floated images, the body will end up being less than the full width of the page, 
+		// leaving whitespace (or whatever the background color is for the page the plugin is being run on), so this styling will fix that.
+		jQuery('body').css({'margin' : "0 auto", 'background' : 'black' });
+		
 	}; // end $.fn.reflectImages
 })(jQuery);
 
