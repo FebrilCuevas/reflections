@@ -100,12 +100,19 @@
 	
 	// run the masonry pluging to get images all nice and laid out aesthetically
 	function runMasonry(){
-		jQuery('body').masonry({
-			itemSelector : '.reflectionsWrapper',
-			columnWidth : 260,
-			isFitWidth: true
-		});
-		masonryRun = true;
+		
+		if ( typeof jQuery.fn.masonry === 'function' ){
+			jQuery('body').masonry({
+				itemSelector : '.reflectionsWrapper',
+				columnWidth : 260,
+				isFitWidth: true
+			});
+			masonryRun = true;
+		}
+		else{
+			throw new Error('jquery.masonry is not loaded');
+		}
+		
 	}
 	
 	$.fn.reflectImages = function(options){
