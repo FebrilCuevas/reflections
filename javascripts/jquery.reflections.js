@@ -121,6 +121,8 @@
 		item = null,
 		options = options || {};
 
+		if( console ){console.log('running reflectImages()...');}
+
 		options = $.extend(defaults, options);
 		
 		// currently out of commission...
