@@ -110,7 +110,7 @@
 			'rotation' : 45, 
 			'opacity' : 0.5, 
 			'stripAllButImages' : false,
-			'removeSmallImages' : { 'minDimension' : 90, 'maxDimension' : 500 },
+			'removeSmallImages' : { 'minDimension' : 90, 'maxDimension' : 400 },
 			'overflowHidden' : true,
 			'removeAnimatedGifs' : false,
 			'ensureMinNumberOfImages' : null
