@@ -2,7 +2,7 @@
  * reflect-images
  *   http://www.telecommutetojuryduty.com/
  *
- * Copyright (c) 2011 D.Guzzo (http://www.telecommutetojuryduty.com/)
+ * Copyright (c) 2011 Dominick Guzzo (http://www.telecommutetojuryduty.com/)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
@@ -56,6 +56,7 @@
 		
 	}
 	
+	// clone and append extra images if necessary
 	function ensureMinNumberOfImages(minImages){
 		if( isNaN(minImages) ){
 			throw new Error('ensureMinNumberOfImages() called with invalid argument; should be a valid number');
@@ -87,6 +88,7 @@
 		}
 	}
 	
+	// removes everything from the document except for image elements
 	function removeAllButImages(){
 		console.log('removeAllButImages');
 		var $images = jQuery('body img');
@@ -96,6 +98,7 @@
 		jQuery(window).scrollTop(0);
 	}
 	
+	// run the masonry pluging to get images all nice and laid out aesthetically
 	function runMasonry(){
 		jQuery('body').masonry({
 			itemSelector : '.reflectionsWrapper',
@@ -110,7 +113,7 @@
 			'rotation' : 45, 
 			'opacity' : 0.5, 
 			'stripAllButImages' : false,
-			'removeSmallImages' : { 'minDimension' : 90, 'maxDimension' : 400 },
+			'removeSmallImages' : { 'minDimension' : 90, 'maxDimension' : 370 },
 			'overflowHidden' : true,
 			'removeAnimatedGifs' : false,
 			'ensureMinNumberOfImages' : null
@@ -120,6 +123,7 @@
 
 		options = $.extend(defaults, options);
 		
+		// currently out of commission...
 		if( options.delay ){
 			var waitTime = 0; // just init this here; it'll be a counter
 		}
@@ -151,12 +155,15 @@
 			})
 		}
 		
+		// if a page only has a small amount of images, it may not fill up the screen after the reflections are run, which has an
+		// underwhelming effect. in this case, we should clone existing images to fill up the space.
 		if( options.ensureMinNumberOfImages ){
 			ensureMinNumberOfImages(options.ensureMinNumberOfImages);
 			jQuery('img').reflectImages(jQuery.extend(true, {}, options, {'ensureMinNumberOfImages' : false}));
 			return;
 		}
 		
+		// take all content out of the body except for image elements. this makes the result more "static" in that it's free of annoying hyperlinks or stying
 		if( options.stripAllButImages ){
 			removeAllButImages();
 			
@@ -169,6 +176,7 @@
 			return;
 		}
 		
+		// run the meat of the plugin on each matched element (should be <img>'s)
 		this.each( function(){
 			item = this;
 			
