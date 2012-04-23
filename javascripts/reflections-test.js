@@ -11,7 +11,9 @@ jQuery( function(){
 						'delay': 0, 
 						'rotation' : 45, 
 						'opacity' : 0.4, 
-						'stripAllButImages' : true }
+						'stripAllButImages' : true,
+						'ensureMinNumberOfImages' : 24
+						}
 					);
 					break;
 				case 37: // left key

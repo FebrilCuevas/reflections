@@ -1,0 +1,6 @@
+body{
+	background: black;	
+}
+ul,li{list-style: none;}
+li{float: left; margin-right: 240px; margin-bottom: 40px;}
+

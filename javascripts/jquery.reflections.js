@@ -25,7 +25,7 @@
 			width = this.width,
 			height = this.height,
 			options = jQuery.extend(true, {}, options);
-			
+
 		// if we want delay so that we can see the reflection happening incrementally
 		// TODO: delay turned off right now because it doesn't work with dynamic masonry as a result of stripping all but images 
 		if ( false && options.delay ){ 
@@ -54,6 +54,23 @@
 			$image.closest('.reflectionsWrapper').css('-webkit-transform', 'rotate('+options.rotation+'deg)');
 		}
 		
+	}
+	
+	function ensureMinNumberOfImages(minImages){
+		if( isNaN(minImages) ){
+			throw new Error('ensureMinNumberOfImages() called with invalid argument; should be a valid number');
+		}
+		
+		var $images = jQuery('img'), numImagesToClone, $imagesToClone, imagesOnPage = $images.length;
+		
+		while ( imagesOnPage < minImages ){
+			numImagesToClone = minImages - imagesOnPage;
+			console.log("we've got a problem; we're short by " + numImagesToClone + " images. going to clone some." );
+			
+			$imagesToClone = jQuery('img:lt(' + numImagesToClone + ')');
+			jQuery('body').append($imagesToClone.clone().addClass('reflectionsClonedImage')); // class is just for record-keeping's sake
+			imagesOnPage += $imagesToClone.length;
+		}
 	}
 	
 	// set things back to the way they were before the plugin was run
@@ -93,13 +110,14 @@
 			'rotation' : 45, 
 			'opacity' : 0.5, 
 			'stripAllButImages' : false,
+			'removeSmallImages' : { 'minDimension' : 90 },
 			'overflowHidden' : true,
-			'removeAnimatedGifs' : false
+			'removeAnimatedGifs' : false,
+			'ensureMinNumberOfImages' : null
 		}, 
 		item = null,
 		options = options || {};
 
-		// todo to flesh out this plugin, other parameterized things (rotation, opacity, etc).
 		options = $.extend(defaults, options);
 		
 		if( options.delay ){
@@ -107,7 +125,26 @@
 		}
 		
 		if( options.removeAnimatedGifs ){
-			jQuery('img[src$=gif]').remove(); // can't tell if they're animated or not, so just remove all GIFs
+			jQuery('img[src$=gif]').remove(); // won't be able to tell if they're animated or not, so just remove all GIFs
+		}
+		
+		// really small images could end up not looking that good, so give user the option to filter them out
+		if ( options.removeSmallImages ){
+			var $images = jQuery('img'), $image;
+			
+			$images.each(function(index) {
+			  $image = jQuery(this);
+				if ( $image.width() < options.removeSmallImages.minDimension || $image.height() < options.removeSmallImages.minDimension ){
+					console.log('removing small image: ' + $image.attr('src') );
+					$image.remove();
+				}
+			})
+		}
+		
+		if( options.ensureMinNumberOfImages ){
+			ensureMinNumberOfImages(options.ensureMinNumberOfImages);
+			jQuery('img').reflectImages(jQuery.extend(true, {}, options, {'ensureMinNumberOfImages' : false}));
+			return;
 		}
 		
 		if( options.stripAllButImages ){
@@ -115,16 +152,14 @@
 			
 			jQuery('img').reflectImages(jQuery.extend(true, {}, options, {'stripAllButImages' : false}));
 			
-			// leave things in place if run a second time
+			// leave things in place if run a second time because it starts to get hairy when masonry is run again
 			if( !masonryRun ){
 				runMasonry();
 			}
-			
 			return;
 		}
 		
 		this.each( function(){
-			
 			item = this;
 			
 			if( options.destroy ){
@@ -140,11 +175,11 @@
 			}
 		});
 		
+		// by default, hide overflow so that the blended result of the images is only one screen's worth
 		if( options.overflowHidden ){
 			jQuery('html').css('overflow', 'hidden');
 		}
 		
 	}; // end $.fn.reflectImages
-		
 })(jQuery);
 
