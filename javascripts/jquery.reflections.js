@@ -110,7 +110,7 @@
 			'rotation' : 45, 
 			'opacity' : 0.5, 
 			'stripAllButImages' : false,
-			'removeSmallImages' : { 'minDimension' : 90 },
+			'removeSmallImages' : { 'minDimension' : 90, 'maxDimension' : 500 },
 			'overflowHidden' : true,
 			'removeAnimatedGifs' : false,
 			'ensureMinNumberOfImages' : null
@@ -137,6 +137,16 @@
 				if ( $image.width() < options.removeSmallImages.minDimension || $image.height() < options.removeSmallImages.minDimension ){
 					console.log('removing small image: ' + $image.attr('src') );
 					$image.remove();
+				}
+				if ( $image.width() > options.removeSmallImages.maxDimension ){
+					console.log('resizing large image: ' + $image.attr('src') );
+					$image.attr('height', ''); // height will be automatically interpreted by the browser to preserve aspect ratio (this is not as good as figuring out the new height and setting it explicitly, but page performance doesn't really matter at this point)
+					$image.attr('width', options.removeSmallImages.maxDimension );
+				}
+				else if ( $image.height() > options.removeSmallImages.maxDimension ){
+					console.log('resizing large image: ' + $image.attr('src') );
+					$image.attr('width', '');
+					$image.attr('height', options.removeSmallImages.maxDimension );
 				}
 			})
 		}
