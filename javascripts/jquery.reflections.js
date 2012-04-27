@@ -112,7 +112,6 @@
 		else{
 			throw new Error('jquery.masonry is not loaded');
 		}
-		
 	}
 	
 	$.fn.reflectImages = function(options){
@@ -123,7 +122,8 @@
 			'removeSmallImages' : { 'minDimension' : 90, 'maxDimension' : 370 },
 			'overflowHidden' : true,
 			'removeAnimatedGifs' : false,
-			'ensureMinNumberOfImages' : null
+			'ensureMinNumberOfImages' : null,
+			'skipMasonry' : false
 		}, 
 		item = null,
 		options = options || {};
@@ -179,7 +179,7 @@
 			jQuery('img').reflectImages(jQuery.extend(true, {}, options, {'stripAllButImages' : false}));
 			
 			// leave things in place if run a second time because it starts to get hairy when masonry is run again
-			if( !masonryRun ){
+			if( !options.skipMasonry && !masonryRun ){
 				runMasonry();
 			}
 			return;
