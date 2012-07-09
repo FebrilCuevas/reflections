@@ -197,7 +197,7 @@ THE SOFTWARE.
 			return;
 		}
 		
-		// run the meat of the plugin on each matched element (should be <img>'s)
+		// run the meat of the plugin on each matched element (should be <img>'s) [this == the jquery collection object with matched elements]
 		this.each( function(){
 			item = this;
 			
