@@ -23,20 +23,16 @@ THE SOFTWARE.
 */
 
 
-(function($){
-	
-	// todo: add ability to strip page of all but image elements.having them floated neaby each other to get the best final result
-	// after the plugin's main function runs. also maybe could load in masonry and make bricks outta them first, but that's a bit 
-	// more ambitious
+(function($, window, undefined){
 	
 	var masonryRun = false;
 	
 	function wrapImage(options){
 
-		var $image = jQuery(this),
-			width = this.width,
-			height = this.height,
-			options = jQuery.extend(true, {}, options);
+    var $image  = jQuery(this),
+        width   = this.width,
+        height  = this.height,
+        options = jQuery.extend(true, {}, options);
 
 		// if we want delay so that we can see the reflection happening incrementally
 		// TODO: delay turned off right now because it doesn't work with dynamic masonry as a result of stripping all but images 
@@ -52,12 +48,12 @@ THE SOFTWARE.
 		// the meat of the process
 		function wrapImageInternal(options){
 			$image.wrap('<div class="reflectionsWrapper"></div>')
-				.after('<div class="reflection top" style="top: -'+height+'px"></div>')
-				.after('<div class="reflection right" style="right: -'+width+'px"></div>')
-				.after('<div class="reflection bottom" style="bottom: -'+height+'px"></div>')
-				.after('<div class="reflection left" style="left: -'+width+'px"></div>');
+				.after('<div class="imageReflection top" style="top: -' + height + 'px"></div>')
+				.after('<div class="imageReflection right" style="right: -' + width + 'px"></div>')
+				.after('<div class="imageReflection bottom" style="bottom: -' + height + 'px"></div>')
+				.after('<div class="imageReflection left" style="left: -' + width + 'px"></div>');
 			
-			var $reflections = $image.closest('.reflectionsWrapper').find('.reflection');
+			var $reflections = $image.closest('.reflectionsWrapper').find('.imageReflection');
 				
 			$reflections.append($image.clone()); // put images into each of the four reflection containers
 			$reflections.css('opacity', options.opacity );
@@ -78,7 +74,7 @@ THE SOFTWARE.
 		
 		while ( imagesOnPage < minImages ){
 			numImagesToClone = minImages - imagesOnPage;
-			console.log("we've got a problem; we're short by " + numImagesToClone + " images. going to clone some." );
+			console.warn("we've got a problem: we're short by " + numImagesToClone + " images. going to clone some to fill up the space..." );
 			
 			$imagesToClone = jQuery('img:lt(' + numImagesToClone + ')');
 			jQuery('body').append($imagesToClone.clone().addClass('reflectionsClonedImage')); // class is just for record-keeping's sake
@@ -94,7 +90,7 @@ THE SOFTWARE.
 			$wrapper = jQuery(this).closest(wrapperSelector);
 
 		if( $wrapper.length > 0 ){
-			$wrapper.find('.reflection').remove();
+			$wrapper.find('.imageReflection').remove();
 			jQuery(this).unwrap(wrapperSelector);
 			jQuery('html').css('overflow', 'auto');
 		}
@@ -102,13 +98,36 @@ THE SOFTWARE.
 	
 	// removes everything from the document except for image elements
 	function removeAllButImages(){
-		console.log('removeAllButImages');
+		console.info('removing all elements in the body except for images...');
 		var $images = jQuery('body img');
 		$images = $images.clone();
 		jQuery( 'body *' ).remove();
 		jQuery('body').append($images);
 		jQuery(window).scrollTop(0);
 	}
+	
+	// really small images could end up not looking that good, so give user the option to filter them out
+	function removeSmallImages($images, options){
+		var $image;
+		
+		$images.each(function(index) {
+		  $image = jQuery(this);
+			if ( $image.width() < options.removeSmallImages.minDimension || $image.height() < options.removeSmallImages.minDimension ){
+				console.info('removing small image: ' + $image.attr('src') );
+				$image.remove();
+			}
+			if ( $image.width() > options.removeSmallImages.maxDimension ){
+				console.info('resizing large image: ' + $image.attr('src') );
+				$image.attr('height', ''); // height will be automatically interpreted by the browser to preserve aspect ratio (this is not as good as figuring out the new height and setting it explicitly, but page performance doesn't really matter at this point)
+				$image.attr('width', options.removeSmallImages.maxDimension );
+			}
+			else if ( $image.height() > options.removeSmallImages.maxDimension ){
+				console.info('resizing large image: ' + $image.attr('src') );
+				$image.attr('width', '');
+				$image.attr('height', options.removeSmallImages.maxDimension );
+			}
+		});
+  }
 	
 	// run the masonry pluging to get images all nice and laid out aesthetically
 	function runMasonry(){
@@ -136,7 +155,8 @@ THE SOFTWARE.
 			'overflowHidden' : true,
 			'removeAnimatedGifs' : false,
 			'ensureMinNumberOfImages' : null,
-			'skipMasonry' : false
+			'skipMasonry' : false,
+			'callback' : null
 		}, 
 		item = null,
 		options = options || {};
@@ -151,32 +171,19 @@ THE SOFTWARE.
 		}
 		
 		if( options.removeAnimatedGifs ){
+		  console.info( 'removing all gifs');
 			jQuery('img[src$=gif]').remove(); // won't be able to tell if they're animated or not, so just remove all GIFs
 		}
 		
 		var $images = jQuery('img');
 		
-		// really small images could end up not looking that good, so give user the option to filter them out
+		if ( $images.length < 1 ){
+		  console.warn('no image elements found; ReflectImages plugin will do nothing.');
+		  return;
+		}
+		
 		if ( options.removeSmallImages ){
-			var $image;
-			
-			$images.each(function(index) {
-			  $image = jQuery(this);
-				if ( $image.width() < options.removeSmallImages.minDimension || $image.height() < options.removeSmallImages.minDimension ){
-					console.log('removing small image: ' + $image.attr('src') );
-					$image.remove();
-				}
-				if ( $image.width() > options.removeSmallImages.maxDimension ){
-					console.log('resizing large image: ' + $image.attr('src') );
-					$image.attr('height', ''); // height will be automatically interpreted by the browser to preserve aspect ratio (this is not as good as figuring out the new height and setting it explicitly, but page performance doesn't really matter at this point)
-					$image.attr('width', options.removeSmallImages.maxDimension );
-				}
-				else if ( $image.height() > options.removeSmallImages.maxDimension ){
-					console.log('resizing large image: ' + $image.attr('src') );
-					$image.attr('width', '');
-					$image.attr('height', options.removeSmallImages.maxDimension );
-				}
-			})
+		  removeSmallImages($images, options);
 		}
 		
 		// if a page only has a small amount of images, it may not fill up the screen after the reflections are run, which has an
@@ -227,6 +234,14 @@ THE SOFTWARE.
 		jQuery('body').css( 'margin', "0 auto" );
 		jQuery('html').css( 'background', 'black');
 		
+		if( options.callback ){
+		  if ( typeof options.callback !== "function" ){
+		    throw new Error( "options.callback is not of type 'function'" );
+	    }
+			
+			options.callback();
+	  }
+		
 	}; // end $.ReflectImages
-})(jQuery);
+})(jQuery, window);
 

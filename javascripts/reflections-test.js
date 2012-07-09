@@ -12,12 +12,15 @@ jQuery( function(){
 						'rotation' : 45, 
 						'opacity' : 0.4, 
 						'stripAllButImages' : true,
-						'ensureMinNumberOfImages' : 20
+						'ensureMinNumberOfImages' : 20,
+						'classname' : 'test',
+						'callback' : function(){
+						  console.log('finished with the ReflectImages() test!');
 						}
-					);
+					});
 					break;
 				case 37: // left key
-					jQuery('li img').reflectImages({'destroy' : true });
+					jQuery.ReflectImages({'destroy' : true });
 					break;
 			}
 		}
