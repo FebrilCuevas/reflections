@@ -126,7 +126,8 @@ THE SOFTWARE.
 		}
 	}
 	
-	$.fn.reflectImages = function(options){
+	$.ReflectImages = function(options){
+	  
 		var defaults = { 
 			'rotation' : 45, 
 			'opacity' : 0.5, 
@@ -153,9 +154,11 @@ THE SOFTWARE.
 			jQuery('img[src$=gif]').remove(); // won't be able to tell if they're animated or not, so just remove all GIFs
 		}
 		
+		var $images = jQuery('img');
+		
 		// really small images could end up not looking that good, so give user the option to filter them out
 		if ( options.removeSmallImages ){
-			var $images = jQuery('img'), $image;
+			var $image;
 			
 			$images.each(function(index) {
 			  $image = jQuery(this);
@@ -180,7 +183,7 @@ THE SOFTWARE.
 		// underwhelming effect. in this case, we should clone existing images to fill up the space.
 		if( options.ensureMinNumberOfImages ){
 			ensureMinNumberOfImages(options.ensureMinNumberOfImages);
-			jQuery('img').reflectImages(jQuery.extend(true, {}, options, {'ensureMinNumberOfImages' : false}));
+			jQuery.ReflectImages(jQuery.extend(true, {}, options, {'ensureMinNumberOfImages' : false}));
 			return;
 		}
 		
@@ -188,7 +191,7 @@ THE SOFTWARE.
 		if( options.stripAllButImages ){
 			removeAllButImages();
 			
-			jQuery('img').reflectImages(jQuery.extend(true, {}, options, {'stripAllButImages' : false}));
+			jQuery.ReflectImages(jQuery.extend(true, {}, options, {'stripAllButImages' : false}));
 			
 			// leave things in place if run a second time because it starts to get hairy when masonry is run again
 			if( !options.skipMasonry && !masonryRun ){
@@ -197,8 +200,8 @@ THE SOFTWARE.
 			return;
 		}
 		
-		// run the meat of the plugin on each matched element (should be <img>'s) [this == the jquery collection object with matched elements]
-		this.each( function(){
+		// process all eligible images
+		$images.each( function(){
 			item = this;
 			
 			if( options.destroy ){
@@ -224,6 +227,6 @@ THE SOFTWARE.
 		jQuery('body').css( 'margin', "0 auto" );
 		jQuery('html').css( 'background', 'black');
 		
-	}; // end $.fn.reflectImages
+	}; // end $.ReflectImages
 })(jQuery);
 

@@ -7,7 +7,7 @@ jQuery( function(){
 				case 39: // right key
 					e.preventDefault();
 					
-					jQuery('img').reflectImages({ 
+					jQuery.ReflectImages({ 
 						'delay': 0, 
 						'rotation' : 45, 
 						'opacity' : 0.4, 
