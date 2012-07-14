@@ -63,7 +63,10 @@ THE SOFTWARE.
 			$reflections.css('opacity', options.opacity );
 			
 			// have some fun:
-			$image.closest('.reflectionsWrapper').css('-webkit-transform', 'rotate('+options.rotation+'deg)');
+			var rotateValue = 'rotate('+options.rotation+'deg)';
+			$image.closest('.reflectionsWrapper').css('-webkit-transform', rotateValue )
+																						.css('-moz-transform', rotateValue )
+																						.css('transform', rotateValue );
 		}
 		
 	}
