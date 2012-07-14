@@ -64,7 +64,7 @@ THE SOFTWARE.
 			
 			// have some fun:
 			var rotateValue = 'rotate('+options.rotation+'deg)';
-			$image.closest('.reflectionsWrapper').css({ '-webkit-transform', rotateValue, '-moz-transform', rotateValue, 'transform', rotateValue });
+			$image.closest('.reflectionsWrapper').css({ '-webkit-transform' : rotateValue, '-moz-transform' : rotateValue, 'transform' : rotateValue });
 		}
 		
 	}
