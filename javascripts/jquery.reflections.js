@@ -79,7 +79,7 @@ THE SOFTWARE.
 		
 		while ( imagesOnPage < minImages ){
 			numImagesToClone = minImages - imagesOnPage;
-			console.log("we've got a problem; we're short by " + numImagesToClone + " images. going to clone some." );
+			//console.log("we've got a problem; we're short by " + numImagesToClone + " images. going to clone some." );
 			
 			$imagesToClone = jQuery('img:lt(' + numImagesToClone + ')');
 			jQuery('body').append($imagesToClone.clone().addClass('reflectionsClonedImage')); // class is just for record-keeping's sake
@@ -89,7 +89,7 @@ THE SOFTWARE.
 	
 	// set things back to the way they were before the plugin was run
 	function destroyReflection(){
-		console.log('destroyReflection');
+		//console.log('destroyReflection');
 		
 		var wrapperSelector = '.reflectionsWrapper',
 			$wrapper = jQuery(this).closest(wrapperSelector);
@@ -103,7 +103,7 @@ THE SOFTWARE.
 	
 	// removes everything from the document except for image elements
 	function removeAllButImages(){
-		console.log('removeAllButImages');
+		//console.log('removeAllButImages');
 		var $images = jQuery('body img');
 		$images = $images.clone();
 		jQuery( 'body *' ).remove();
@@ -141,7 +141,7 @@ THE SOFTWARE.
 		item = null,
 		options = options || {};
 
-		if( console ){console.log('running reflectImages()...');}
+		if( console ){//console.log('running reflectImages()...');}
 
 		options = $.extend(defaults, options);
 		
@@ -161,16 +161,16 @@ THE SOFTWARE.
 			$images.each(function(index) {
 			  $image = jQuery(this);
 				if ( $image.width() < options.removeSmallImages.minDimension || $image.height() < options.removeSmallImages.minDimension ){
-					console.log('removing small image: ' + $image.attr('src') );
+					//console.log('removing small image: ' + $image.attr('src') );
 					$image.remove();
 				}
 				if ( $image.width() > options.removeSmallImages.maxDimension ){
-					console.log('resizing large image: ' + $image.attr('src') );
+					//console.log('resizing large image: ' + $image.attr('src') );
 					$image.attr('height', ''); // height will be automatically interpreted by the browser to preserve aspect ratio (this is not as good as figuring out the new height and setting it explicitly, but page performance doesn't really matter at this point)
 					$image.attr('width', options.removeSmallImages.maxDimension );
 				}
 				else if ( $image.height() > options.removeSmallImages.maxDimension ){
-					console.log('resizing large image: ' + $image.attr('src') );
+					//console.log('resizing large image: ' + $image.attr('src') );
 					$image.attr('width', '');
 					$image.attr('height', options.removeSmallImages.maxDimension );
 				}
